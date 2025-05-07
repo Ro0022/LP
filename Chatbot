@@ -1,0 +1,50 @@
+def show_menu():
+    menu = {
+        "pizza": 200,
+        "burger": 100,
+        "pasta": 150,
+        "salad": 80,
+        "coffee": 60
+    }
+    print("\n📋 Menu:")
+    for item, price in menu.items():
+        print(f" - {item.title()} : ₹{price}")
+    return menu
+
+def chatbot():
+    print("🤖 Welcome to QuickBite Restaurant!")
+    print("Type 'menu' to see the menu, 'order <item>' to order, 'exit' to quit.\n")
+    
+    menu = show_menu()
+    order = []
+
+    while True:
+        user_input = input("You: ").lower().strip()
+
+        if user_input == "menu":
+            show_menu()
+        elif user_input.startswith("order"):
+            item = user_input.replace("order", "").strip()
+            if item in menu:
+                order.append(item)
+                print(f"🤖 {item.title()} added to your order.")
+            else:
+                print(f"🤖 Sorry, we don't have '{item}'.")
+        elif user_input == "bill":
+            if order:
+                print("\n🧾 Your Bill:")
+                total = 0
+                for item in order:
+                    print(f" - {item.title()} : ₹{menu[item]}")
+                    total += menu[item]
+                print(f"Total: ₹{total}")
+            else:
+                print("🤖 You have not ordered anything yet.")
+        elif user_input == "exit":
+            print("🤖 Thank you for visiting QuickBite. Goodbye!")
+            break
+        else:
+            print("🤖 I didn't understand that. Try 'menu', 'order <item>', 'bill', or 'exit'.")
+
+# Run the chatbot
+chatbot()
