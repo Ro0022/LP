@@ -1,0 +1,36 @@
+def medical_expert_system():
+    print("🩺 Welcome to the Basic Medical Expert System")
+    print("Please answer with 'yes' or 'no' to the following symptoms.\n")
+
+    def ask(symptom):
+        return input(f"Do you have {symptom}? ").lower().strip() == "yes"
+
+    # Gather symptoms
+    fever = ask("a fever")
+    cough = ask("a cough")
+    headache = ask("a headache")
+    sore_throat = ask("a sore throat")
+    fatigue = ask("fatigue or weakness")
+    body_pain = ask("body pain")
+    nausea = ask("nausea or vomiting")
+    diarrhea = ask("diarrhea")
+    short_breath = ask("shortness of breath")
+
+    print("\n🔎 Diagnosis Result:")
+
+    # Rule-based diagnosis
+    if fever and cough and sore_throat and fatigue:
+        print("→ You might have the Flu.")
+    elif fever and cough and short_breath:
+        print("→ You might have COVID-19. Please consult a doctor immediately.")
+    elif nausea and vomiting and diarrhea:
+        print("→ You might have a Stomach Infection.")
+    elif headache and body_pain and fatigue:
+        print("→ You might have Dengue or a Viral Fever. Please get tested.")
+    elif sore_throat and no_fever := not fever:
+        print("→ You might have a mild Throat Infection.")
+    else:
+        print("→ Symptoms are not specific enough. Please consult a healthcare professional.")
+
+# Run the expert system
+medical_expert_system()
