@@ -1,48 +1,32 @@
-# Transposition Cipher Encryption
-def encrypt(plain_text, key):
-    # Create a list to hold the ciphertext characters
-    cipher_text = [''] * key
+def encrypt(plaintext, shift):
+    ciphertext = ""
+    for char in plaintext:
+        if char.isalpha():
+            shift_base = 65 if char.isupper() else 97  # ASCII for 'A' or 'a'
+            new_char = chr((ord(char) - shift_base + shift) % 26 + shift_base)
+            ciphertext += new_char
+        else:
+            ciphertext += char  # Non-alphabetic characters unchanged
+    return ciphertext
 
-    # Place each character in its corresponding row (according to the key)
-    for col in range(len(plain_text)):
-        row = col % key
-        cipher_text[row] += plain_text[col]
+def decrypt(ciphertext, shift):
+    plaintext = ""
+    for char in ciphertext:
+        if char.isalpha():
+            shift_base = 65 if char.isupper() else 97
+            new_char = chr((ord(char) - shift_base - shift) % 26 + shift_base)
+            plaintext += new_char
+        else:
+            plaintext += char
+    return plaintext
 
-    # Join all rows to form the encrypted text
-    return ''.join(cipher_text)
+# Example usage
+plaintext = "transpositionassign"
+key = 5
 
-# Transposition Cipher Decryption
-def decrypt(cipher_text, key):
-    # Calculate the number of rows and columns in the grid
-    num_of_columns = len(cipher_text) // key
-    num_of_rows = key
-    num_of_shaded_boxes = (num_of_columns * num_of_rows) - len(cipher_text)
+ciphertext = encrypt(plaintext, key)
+decrypted_text = decrypt(ciphertext, key)
 
-    # Create an empty grid
-    grid = [''] * num_of_columns
-
-    # Fill the grid with the cipher text
-    col = 0
-    row = 0
-    for symbol in cipher_text:
-        grid[col] += symbol
-        col += 1
-        if (col == num_of_columns) or (col == num_of_columns - 1 and row >= num_of_rows - num_of_shaded_boxes):
-            col = 0
-            row += 1
-
-    # Reconstruct the original message
-    plain_text = ''.join([grid[i] for i in range(num_of_columns)])
-    return plain_text
-
-# Test the Transposition Cipher
-plain_text = "HelloWorld"
-key = 4
-
-# Encrypt the plain text
-cipher_text = encrypt(plain_text, key)
-print(f"Encrypted text: {cipher_text}")
-
-# Decrypt the cipher text
-decrypted_text = decrypt(cipher_text, key)
-print(f"Decrypted text: {decrypted_text}")
+print("Plaintext:", plaintext)
+print("Encrypted:", ciphertext)
+print("Decrypted:", decrypted_text)
