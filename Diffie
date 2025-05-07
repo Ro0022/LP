@@ -1,0 +1,34 @@
+def main():
+    P = 23  # Prime number (public)
+    G = 6   # Primitive root modulo P (public)
+
+    print("The value of P:", P)
+    print("The value of G:", G)
+
+    # Alice's private key
+    a = 4
+    print("The private key 'a' for Alice:", a)
+
+    # Bob's private key
+    b = 3
+    print("The private key 'b' for Bob:", b)
+
+    # Alice computes A = G^a mod P
+    x = pow(G, a, P)
+
+    # Bob computes B = G^b mod P
+    y = pow(G, b, P)
+
+    # Exchange of public keys: Alice gets y, Bob gets x
+
+    # Alice computes shared key: (Bob's public key)^a mod P
+    ka = pow(y, a, P)
+
+    # Bob computes shared key: (Alice's public key)^b mod P
+    kb = pow(x, b, P)
+
+    print("Secret key for Alice is:", ka)
+    print("Secret key for Bob is:", kb)
+
+if __name__ == "__main__":
+    main()
