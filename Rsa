@@ -1,0 +1,42 @@
+def extended_gcd(a, b):
+    if a == 0:
+        return b, 0, 1
+    else:
+        g, y, x = extended_gcd(b % a, a)
+        return g, x - (b // a) * y, y
+
+def mod_inverse(e, phi):
+    g, x, y = extended_gcd(e, phi)
+    if g != 1:
+        raise ValueError("Modular inverse does not exist")
+    else:
+        return x % phi
+
+def generate_keys():
+    p, q = 59, 53  # Example small primes
+    n = p * q
+    phi = (p - 1) * (q - 1)
+    e = 7  # Public exponent
+    d = mod_inverse(e, phi)  # Private exponent
+    return (e, n), (d, n)
+
+def encrypt(pub_key, plaintext):
+    e, n = pub_key
+    return [pow(ord(char), e, n) for char in plaintext]
+
+def decrypt(priv_key, ciphertext):
+    d, n = priv_key
+    return ''.join([chr(pow(char, d, n)) for char in ciphertext])
+
+# Run the RSA example
+pub_key, priv_key = generate_keys()
+message = "HIPPOPOTOMONSTROSESQUIPEDALIOPHOBE"
+
+ctext = encrypt(pub_key, message)
+d_message = decrypt(priv_key, ctext)
+
+print(f"Public Key: {pub_key}")
+print(f"Private Key: {priv_key}")
+print(f"Encrypted: {ctext}")
+print(f"Decrypted: {d_message}")
+                    
