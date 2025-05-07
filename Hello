@@ -1,0 +1,24 @@
+def and_xor_with_127(input_str):
+    # Display the original string
+    print(f"Original String: {input_str}")
+    
+    # Iterate over each character in the string
+    for char in input_str:
+        char_ascii = ord(char)
+        
+        # Perform AND operation with 127
+        and_result = char_ascii & 127
+        
+        # Perform XOR operation with 127
+        xor_result = char_ascii ^ 127
+        
+        # Display results
+        print(f"Character: {char}")
+        print(f"ASCII value: {char_ascii}")
+        print(f"AND with 127: {and_result} (Character: {chr(and_result)})")
+        print(f"XOR with 127: {xor_result} (Character: {chr(xor_result)})")
+        print("-" * 40)
+
+# Test the function with the string "Hello World"
+input_string = "Hello World"
+and_xor_with_127(input_string)
