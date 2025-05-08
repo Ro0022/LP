@@ -1,34 +1,61 @@
-# Transposition Cipher Encryption
-def encrypt(plain_text, key):
-    cipher_text = [''] * key
-    for col in range(len(plain_text)):
-        row = col % key
-        cipher_text[row] += plain_text[col]
-    return ''.join(cipher_text)
+import math
 
-# Transposition Cipher Decryption
-def decrypt(cipher_text, key):
-    num_of_columns = (len(cipher_text) + key - 1) // key
-    num_of_rows = key
-    num_of_shaded_boxes = (num_of_columns * num_of_rows) - len(cipher_text)
+def encrypt_with_key(plain_text, key):
+    key_order = sorted(list(enumerate(key)), key=lambda x: x[1])
+    num_cols = len(key)
+    num_rows = math.ceil(len(plain_text) / num_cols)
 
-    plaintext = [''] * num_of_columns
-    col = 0
-    row = 0
-    for symbol in cipher_text:
-        plaintext[col] += symbol
-        col += 1
-        if (col == num_of_columns) or (col == num_of_columns - 1 and row >= num_of_rows - num_of_shaded_boxes):
-            col = 0
-            row += 1
-    return ''.join([plaintext[col][row] for row in range(num_of_rows) for col in range(num_of_columns) if row < len(plaintext[col])])
+    # Fill grid row-wise
+    grid = [['' for _ in range(num_cols)] for _ in range(num_rows)]
+    idx = 0
+    for row in range(num_rows):
+        for col in range(num_cols):
+            if idx < len(plain_text):
+                grid[row][col] = plain_text[idx]
+                idx += 1
 
-# Test the Transposition Cipher
+    # Read columns based on key order
+    cipher_text = ''
+    for col_index, _ in key_order:
+        for row in grid:
+            if row[col_index] != '':
+                cipher_text += row[col_index]
+
+    return cipher_text
+
+
+def decrypt_with_key(cipher_text, key):
+    key_order = sorted(list(enumerate(key)), key=lambda x: x[1])
+    num_cols = len(key)
+    num_rows = math.ceil(len(cipher_text) / num_cols)
+    num_shaded_boxes = (num_cols * num_rows) - len(cipher_text)
+
+    # Create empty grid
+    grid = [['' for _ in range(num_cols)] for _ in range(num_rows)]
+
+    # Determine column lengths
+    col_lengths = [num_rows] * num_cols
+    for i in range(num_shaded_boxes):
+        col_lengths[key_order[-(i+1)][0]] -= 1
+
+    # Fill grid column-wise based on key order
+    idx = 0
+    for col_index, _ in key_order:
+        for row in range(col_lengths[col_index]):
+            grid[row][col_index] = cipher_text[idx]
+            idx += 1
+
+    # Read grid row-wise
+    plain_text = ''.join([''.join(row) for row in grid])
+    return plain_text
+
+
+# Example
 plain_text = "HelloWorld"
-key = 4
+key = "ZEBRAS"
 
-cipher_text = encrypt(plain_text, key)
+cipher_text = encrypt_with_key(plain_text, key)
 print(f"Encrypted text: {cipher_text}")
 
-decrypted_text = decrypt(cipher_text, key)
+decrypted_text = decrypt_with_key(cipher_text, key)
 print(f"Decrypted text: {decrypted_text}")
